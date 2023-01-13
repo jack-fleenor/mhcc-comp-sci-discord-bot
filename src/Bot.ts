@@ -5,7 +5,7 @@ import config from "./config";
 
 const token = config.DISCORD_TOKEN
 
-console.log("Bot is starting...");
+console.log("Bot is starting..");
 
 const client = new Client({
   intents: []
