@@ -1,5 +1,5 @@
 import { CommandInteraction, Client, APIVersion } from "discord.js";
-import { Command } from "../../Command";
+import { Command } from "../Command";
 
 export const StyleGuide: Command = {
     name: "styleguide",
