@@ -5,23 +5,20 @@ interface Assignment{
     title: string;
     description: string;
     dueDate: Date;
-    link: string;
 }
 
 interface Assignments extends Array<Assignment>{}
 
 const assignments: Assignments = [
     {
-        title: "Week 1 Pltl Worksheet - Basics",
+        title: "Week 2 Pltl Worksheet",
         description: "Submit to tutor.",
-        dueDate: new Date('JAN 19, 2023'),
-        link: "https://mhcc.blackboard.com/webapps/blackboard/content/listContent.jsp?course_id=_64937_1&content_id=_2144597_1&mode=reset"
+        dueDate: new Date('JAN 31, 2023')
     },
     {
-        title: "zyBooks Week 1",
+        title: "Flowchart Assignment",
         description: "Click link",
         dueDate: new Date('JAN 17, 2023'),
-        link: "https://learn.zybooks.com/zybook/MHCCCS161WieseWinter2023?selectedPanel=assignments-panel"
     },    
 ]
 
@@ -36,8 +33,7 @@ export const Assignments: Command = {
             const title = `Title: ${assignment['title']}\n`;
             const description = `Description: ${assignment['description']}\n`;
             const dueDate = `Due Date: ${assignment['dueDate'].toDateString()}\n`;
-            const link = `Link: ${assignment['link']}\n`;
-            message = message + '\n' + title + description + dueDate + link;
+            message = message + '\n' + title + description + dueDate;
         });
 
         const content = header + message;
