@@ -19,7 +19,7 @@ const assignments: Assignments = [
         title: "Flowchart Assignment",
         description: "Click link",
         dueDate: new Date('JAN 17, 2023'),
-    },    
+    }
 ]
 
 export const Assignments: Command = {
