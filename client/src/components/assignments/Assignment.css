@@ -1,0 +1,27 @@
+.assignment-card {
+  border: 1px solid #000;
+  border-radius: 15px;
+  min-width: 250px;
+  margin: 5px;
+}
+
+.assignment-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 15px 5px;
+}
+
+.assignment-body{
+  padding: 5px 15px 5px;
+  text-align: left;
+}
+
+.assignment-body-dueDate{
+  color: grey;
+  font-style: italic;
+}
+
+.assignment-body-description{
+
+}
