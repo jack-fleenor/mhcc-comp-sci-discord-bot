@@ -5,7 +5,7 @@ import Assignment from './components/assignments/Assignment'
 import Form from './components/assignments/Form'
 import axios from 'axios';
 
-interface Assignment{
+interface AssignmentT{
   id: any;
   title: string;
   link: string;
@@ -14,24 +14,26 @@ interface Assignment{
 }
 
 function App() {
-  const [ assignments, setAssignments ] = useState<Array<Assignment>>([]);
-  
-  const addAssignment = (assignment: Assignment) : void => {
+  const [ assignments, setAssignments ] = useState<Array<AssignmentT>>([]);
+  const [ updated, setUpdated ] = useState<boolean>(false);
+
+  const addAssignment = (assignment: any) : void => {
     postAssignment(assignment);
   };
 
-  const deleteAssignment = (assignment: Assignment) : void => {
+  const deleteAssignment = (assignment: AssignmentT) : void => {
     const { id } = assignment;
     axios.delete(`http://localhost:5174/api/assignment/${id}`)
     .then((response) => {
+      setUpdated(true);
       // console.log(response);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
     });
   }
 
-  const postAssignment = (assignment: Assignment) : void => {
+  const postAssignment = (assignment: AssignmentT) : void => {
     const { title, link, dueDate, description } = assignment;
     axios.post("http://localhost:5174/api/assignment/", {
       title: title,
@@ -39,8 +41,11 @@ function App() {
       dueDate: dueDate,
       description: description
     })
+    .then((response) => {
+      setUpdated(true);
+    })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
     });
   };
 
@@ -49,19 +54,22 @@ function App() {
       const assignments = response.data.data;
       setAssignments(assignments)
     }).catch((error) => {
-      console.log(error);
+      // console.log(error);
     })    
   }
 
   useEffect(() => {
     getAssignments()
+    if(updated){
+      setUpdated(false);
+    }
   }, [ postAssignment, deleteAssignment ]);
   
   return (
     <div className="App">
       <div className="assignments-container">
         <div className="assignments-menu">
-          <Form addAssignment={addAssignment}  />
+          <Form addAssignment={addAssignment} updated={updated} />
         </div>
         <div className="assignments-list">
           {

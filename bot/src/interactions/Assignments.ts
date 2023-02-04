@@ -1,43 +1,44 @@
 import { CommandInteraction, Client } from "discord.js";
 import { Command } from "../Command";
-
+import axios from 'axios';
 interface Assignment{
     title: string;
     description: string;
     dueDate: Date;
+    link: string;
 }
-
-interface Assignments extends Array<Assignment>{}
-
-const assignments: Assignments = [
-    {
-        title: "Week 2 Pltl Worksheet",
-        description: "Submit to tutor.",
-        dueDate: new Date('JAN 31, 2023')
-    },
-    {
-        title: "Flowchart Assignment",
-        description: "Click link",
-        dueDate: new Date('JAN 17, 2023'),
-    }
-]
+interface Assignments extends Array<Assignment>{};
 
 export const Assignments: Command = {
     name: "assignments",
     description: "Returns this weeks assignments.",
     type: 1, // CHAT_INPUT
     run: async (client: Client, interaction: CommandInteraction) => {
-        const header = "Here are the weeks assignments for Computer Science 1: \n";
+        let header = "Here are the assignments for Computer Science 1 due within the next 14 days.\n ----\n";
         let message: string = '';
+        const assignments: Assignments = await axios
+        .get("http://localhost:5174/api/assignments")
+        .then((response: any) => {
+            return response.data.data;
+        })
+        const today = new Date();
+        assignments.sort((a: any, b: any) => {
+            a = new Date(a.dueDate);
+            b = new Date(b.dueDate);
+            return a - b;
+        })
         assignments.forEach((assignment: Assignment) => {
-            const title = `Title: ${assignment['title']}\n`;
-            const description = `Description: ${assignment['description']}\n`;
-            const dueDate = `Due Date: ${assignment['dueDate'].toDateString()}\n`;
-            message = message + '\n' + title + description + dueDate;
+            const parsedDate: Date = new Date(assignment.dueDate);
+            const msBetweenDates: number = parsedDate.getTime() - today.getTime();
+            const daysBetweenDates: number = msBetweenDates / (24 * 60 * 60 * 1000);
+            if (daysBetweenDates < 14 && daysBetweenDates >= 0) {
+                const title: string = `\tTitle: [${assignment['title']}](${assignment['link']})\n`;
+                const description: string = `\tDescription: ${assignment['description']}\n`;
+                const dueDate: string = `\tDue Date: ${assignment['dueDate']}\n`;
+                message += title + dueDate + description + "-------------\n";
+            }
         });
-
         const content = header + message;
-
         await interaction.followUp({
             ephemeral: true,
             content

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "./Form.css";
 
 interface Assignment{
@@ -6,8 +6,8 @@ interface Assignment{
   value: string | Date;
 }
 
-const Form = (props: { addAssignment: any })  => {
-  const { addAssignment } = props;
+const Form = (props: { addAssignment: any, updated: boolean }) => {
+  const { addAssignment, updated } = props;
 
   const [ assignment, setAssignment ] = React.useState({
     title: null,
@@ -16,9 +16,15 @@ const Form = (props: { addAssignment: any })  => {
   });
 
   const handleSubmit = (e: any) => {
-    e.preventDefault()
+    e.preventDefault();
     addAssignment(assignment)
   }
+
+  useEffect(() => {
+    if(updated){
+      console.log('REFRESH')
+    }
+  }, [ updated ])
 
   const handleUpdate = (_assignment: Assignment) => {
     setAssignment({ ...assignment, [_assignment.field]: _assignment.value });
