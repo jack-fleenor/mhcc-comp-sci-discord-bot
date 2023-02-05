@@ -56,6 +56,40 @@ app.delete("/api/assignment/:id", (req, res, next) => {
     });
 })
 
+app.patch("/api/assignment/:id", (req, res, next) => {
+    var data = {
+        title: req.body.title,
+        link: req.body.link,
+        dueDate: req.body.dueDate,
+        description: req.body.description
+    }
+    db.run(
+        `UPDATE assignment set 
+           title = COALESCE(?,title), 
+           link = COALESCE(?,link), 
+           dueDate = COALESCE(?,dueDate),
+           description: COALESCE(?,description)
+           WHERE id = ?`,
+        [
+            data.title, 
+            data.link, 
+            data.dueDate, 
+            data.description, 
+            req.params.id
+        ],
+        function (err: any, result: any) {
+            if (err){
+                res.status(400).json({"error": res})
+                return;
+            }
+            res.json({
+                message: "success",
+                data: data,
+                changes: this.changes
+            })
+    });
+})
+
 app.get("/api/assignments/:id", (req, res, next) => {
     var sql = "select * from assignments where id = ?"
     var params = [req.params.id]

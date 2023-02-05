@@ -26,9 +26,11 @@
 
 }
 
-.dropdown {
+.dropdown button{
   position: relative;
   display: inline-block;
+  padding: 5px;
+  width: 50px;
 }
 
 .dropdown-content {
@@ -42,9 +44,8 @@
   text-decoration: none;
   display: block;
   padding: 5px;
+  width: 50px;
 }
-
-.dropdown-content button:hover {background-color: #ddd;}
 
 .dropdown:hover .dropdown-content {display: block;}
 
