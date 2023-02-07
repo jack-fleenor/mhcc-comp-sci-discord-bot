@@ -6,8 +6,6 @@ function App() {
   return (
     <div className="App">
       <div className="assignments-container">
-        <div className="assignments-menu">
-        </div>
         <div className="assignments-list">
           <Assignments />
         </div>

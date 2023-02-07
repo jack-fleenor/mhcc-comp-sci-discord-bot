@@ -16,8 +16,10 @@ const Assignments = () => {
   }
 
   const updateAssignment = (assignment: Assignment) : void => {
-    axios.patch( `http://localhost:5174/api/assignment/${assignment.id}`, assignment )
-    .then((): void => setUpdated(true))
+    const { id, title, description, dueDate, link } = assignment;
+    const data ={ title, link, dueDate, description }
+    console.log(data)
+    axios.patch( `http://localhost:5174/api/assignment/${id}`, { title, link, dueDate, description } ) .then((): void => setUpdated(true))
     .catch((error): void => console.log(error));
   }
 

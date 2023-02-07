@@ -36,6 +36,7 @@ const AssignmentCard = (props: AssignmentProps): JSX.Element => {
         setActiveEdit(true);
         break;
       case MenuActions.Save:
+        console.log(localAssignment);
         updateAssignment(localAssignment);
         break;
       case MenuActions.Delete:
@@ -52,7 +53,10 @@ const AssignmentCard = (props: AssignmentProps): JSX.Element => {
   };
 
   const updateField = ( key: AssignmentKeys, value: string ) => {
+    console.log(key, value);
+    console.log(localAssignment);
     const tempAssignment = { ...localAssignment, [key]: value };
+    console.log(tempAssignment);
     setLocalAssignment(tempAssignment);
   };
 

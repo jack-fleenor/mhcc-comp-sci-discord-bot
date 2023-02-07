@@ -10,7 +10,7 @@ const AssignmentDescription = ({ description, activeEdit, updateField }: Assignm
       <textarea 
         style={{display: "block", width: "90%"}} 
         defaultValue={description}
-        onChange={(e) => updateField({ field: "description", value: e.target.value })}
+        onChange={(e) => updateField("description", e.target.value )}
         className="assignment-description" 
         name="description" 
         rows={5}

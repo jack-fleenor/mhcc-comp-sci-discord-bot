@@ -63,29 +63,33 @@ app.patch("/api/assignment/:id", (req, res, next) => {
         dueDate: req.body.dueDate,
         description: req.body.description
     }
+    console.log(req.body);
+    console.log(data);
+    var sql = `UPDATE assignments set 
+        title = coalesce(?,title), 
+        link = coalesce(?,link), 
+        dueDate = coalesce(?,dueDate),
+        description: coalesce(?,description)
+        WHERE id = ?`
+    var params = [
+        data.title, 
+        data.link, 
+        data.dueDate, 
+        data.description,
+        req.params.id
+    ]
     db.run(
-        `UPDATE assignment set 
-           title = COALESCE(?,title), 
-           link = COALESCE(?,link), 
-           dueDate = COALESCE(?,dueDate),
-           description: COALESCE(?,description)
-           WHERE id = ?`,
-        [
-            data.title, 
-            data.link, 
-            data.dueDate, 
-            data.description, 
-            req.params.id
-        ],
+        sql,
+        params,
         function (err: any, result: any) {
             if (err){
-                res.status(400).json({"error": res})
+                res.status(400).json({"error": "error"})
                 return;
             }
             res.json({
-                message: "success",
-                data: data,
-                changes: this.changes
+                "message": "success",
+                // "data": data
+                // changes: this.changes
             })
     });
 })
