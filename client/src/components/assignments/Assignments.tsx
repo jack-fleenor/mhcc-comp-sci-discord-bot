@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import AssignmentCard from './AssignmentCard';
 import Form from './Form';
+import AssignmentCard from './AssignmentCard';
 
 const Assignments = () => {
   const [ assignments, setAssignments ] = useState<Array<Assignment>>([]);
@@ -10,30 +10,32 @@ const Assignments = () => {
   const addAssignment = (assignment: Assignment) : void => postAssignment(assignment);
 
   const deleteAssignment = (assignment: Assignment) : void => {
-    axios.delete(`http://localhost:5174/api/assignment/${assignment.id}`)
+    const { id } = assignment;
+    axios.delete(`http://localhost:5174/api/assignments/${id}`)
     .then((): void => setUpdated(true))
     .catch((error): void => console.log(error));
   }
 
   const updateAssignment = (assignment: Assignment) : void => {
     const { id, title, description, dueDate, link } = assignment;
-    const data ={ title, link, dueDate, description }
-    console.log(data)
-    axios.patch( `http://localhost:5174/api/assignment/${id}`, { title, link, dueDate, description } ) .then((): void => setUpdated(true))
+    axios.patch(`http://localhost:5174/api/assignments/${id}`, { title, link, dueDate, description })
+    .then((): void => setUpdated(true))
     .catch((error): void => console.log(error));
   }
 
   const postAssignment = (assignment: Assignment) : void => {
-    axios.post( "http://localhost:5174/api/assignment/", assignment )
+    axios.post( "http://localhost:5174/api/assignments/", assignment )
     .then((): void => setUpdated(true))
     .catch((error): void => console.log(error));
   };
 
   const getAssignments = (): void => {
-    axios.get("http://localhost:5174/api/assignments").then((response) => {
+    axios.get("http://localhost:5174/api/assignments")
+    .then((response) => {
       const assignments: Assignment[] = response.data.data;
       setAssignments(assignments)
-    }).catch((error): void => console.log(error));
+    })
+    .catch((error): void => console.log(error));
   }
 
   useEffect(() => {
@@ -46,6 +48,7 @@ const Assignments = () => {
       <div className="assignments-list">
         { assignments && assignments.map((assignment: Assignment): JSX.Element => {
             return <AssignmentCard
+              updated={updated}
               assignment={assignment} 
               deleteAssignment={deleteAssignment} 
               updateAssignment={updateAssignment}

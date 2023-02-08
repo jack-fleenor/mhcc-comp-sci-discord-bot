@@ -1,15 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AssignmentTitle from './AssignmentTitle';
 import AssignmentDueDate from './AssignmentDueDate';
 import AssignmentActionMenu from './AssignmentActionMenu';
 import AssignmentDescription from './AssignmentDescription';
 import "./Assignment.css";
-
-type AssignmentProps = {
-  assignment: Assignment,
-  deleteAssignment: Function,
-  updateAssignment: Function
-}
 
 enum AssignmentKeys {
   Title = "title",
@@ -26,7 +20,7 @@ enum MenuActions {
 }
 
 const AssignmentCard = (props: AssignmentProps): JSX.Element => {
-  const { assignment, deleteAssignment, updateAssignment } = props;
+  const { updated, assignment, deleteAssignment, updateAssignment } = props;
   const [ activeEdit, setActiveEdit ] = useState<boolean>(false);
   const [ localAssignment, setLocalAssignment ] = useState<Assignment>(assignment);
 
@@ -36,7 +30,6 @@ const AssignmentCard = (props: AssignmentProps): JSX.Element => {
         setActiveEdit(true);
         break;
       case MenuActions.Save:
-        console.log(localAssignment);
         updateAssignment(localAssignment);
         break;
       case MenuActions.Delete:
@@ -52,13 +45,11 @@ const AssignmentCard = (props: AssignmentProps): JSX.Element => {
     }
   };
 
-  const updateField = ( key: AssignmentKeys, value: string ) => {
-    console.log(key, value);
-    console.log(localAssignment);
-    const tempAssignment = { ...localAssignment, [key]: value };
-    console.log(tempAssignment);
-    setLocalAssignment(tempAssignment);
-  };
+  const updateField = (key: AssignmentKeys, value: string): void => setLocalAssignment(
+    { ...localAssignment, [key]: value }
+  );
+
+  useEffect(() => setActiveEdit(false), [ updated ]);
 
   return (
     <div className="assignment-card">

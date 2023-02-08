@@ -21,7 +21,7 @@ app.get("/api/assignments", (req, res, next) => {
       });
 });
 
-app.post('/api/assignment/', (req, res, next) => {
+app.post('/api/assignments/', (req, res, next) => {
     var data = {
         title: req.body.title,
         link: req.body.link,
@@ -43,7 +43,7 @@ app.post('/api/assignment/', (req, res, next) => {
     });
 })
 
-app.delete("/api/assignment/:id", (req, res, next) => {
+app.delete("/api/assignments/:id", (req, res, next) => {
     db.run(
         'DELETE FROM assignments WHERE id = ?',
         req.params.id,
@@ -56,20 +56,18 @@ app.delete("/api/assignment/:id", (req, res, next) => {
     });
 })
 
-app.patch("/api/assignment/:id", (req, res, next) => {
+app.patch("/api/assignments/:id", (req, res, next) => {
     var data = {
         title: req.body.title,
         link: req.body.link,
         dueDate: req.body.dueDate,
         description: req.body.description
     }
-    console.log(req.body);
-    console.log(data);
     var sql = `UPDATE assignments set 
         title = coalesce(?,title), 
         link = coalesce(?,link), 
         dueDate = coalesce(?,dueDate),
-        description: coalesce(?,description)
+        description = coalesce(?,description)
         WHERE id = ?`
     var params = [
         data.title, 
@@ -88,8 +86,7 @@ app.patch("/api/assignment/:id", (req, res, next) => {
             }
             res.json({
                 "message": "success",
-                // "data": data
-                // changes: this.changes
+                "data": data
             })
     });
 })

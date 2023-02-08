@@ -13,9 +13,7 @@ const AssignmentDueDate = ({ dueDate, activeEdit, updateField }: AssignmentDueDa
       className="assignment-dueDate" 
       name="dueDate" 
       defaultValue={dueDate}
-      onChange={(e) => updateField(
-        { field: "dueDate", value: e.target.value }
-      )}
+      onChange={(e) => updateField( "dueDate", e.target.value )}
     />
     </> : <div className="assignment-body-dueDate">
       { dueDate }

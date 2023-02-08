@@ -14,7 +14,7 @@ export const Assignments: Command = {
     description: "Returns this weeks assignments.",
     type: 1, // CHAT_INPUT
     run: async (client: Client, interaction: CommandInteraction) => {
-        let header = "Here are the assignments for Computer Science 1 due within the next 14 days.\n ----\n";
+        let header = "Here are the assignments for due within the next 7 days.\n ----\n";
         let message: string = '';
         const assignments: Assignments = await axios
         .get("http://localhost:5174/api/assignments")
@@ -31,16 +31,15 @@ export const Assignments: Command = {
             const parsedDate: Date = new Date(assignment.dueDate);
             const msBetweenDates: number = parsedDate.getTime() - today.getTime();
             const daysBetweenDates: number = msBetweenDates / (24 * 60 * 60 * 1000);
-            if (daysBetweenDates < 14 && daysBetweenDates >= 0) {
-                const title: string = `\tTitle: [${assignment['title']}](${assignment['link']})\n`;
-                const description: string = `\tDescription: ${assignment['description']}\n`;
+            if (daysBetweenDates < 7 && daysBetweenDates >= 0) {
+                const title: string = `[${assignment['title']}](${assignment['link']})\n`;
+                const description: string = `${assignment['description']}\n\n`;
                 const dueDate: string = `\tDue Date: ${assignment['dueDate']}\n`;
-                message += title + dueDate + description + "-------------\n";
+                message += title + dueDate + description;
             }
         });
         const content = header + message;
         await interaction.followUp({
-            ephemeral: true,
             content
         });
     }

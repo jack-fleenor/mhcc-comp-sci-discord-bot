@@ -1,19 +1,16 @@
 import React, { useEffect } from 'react';
 import "./Form.css";
 
-interface Assignment{
-  field: "title" | "dueDate" | "description" | "link";
-  value: string | Date;
-}
-
 const Form = (props: { addAssignment: any, updated: boolean }) => {
   const { addAssignment, updated } = props;
-
-  const [ assignment, setAssignment ] = React.useState({
-    title: null,
-    dueDate: null,
-    description: null
-  });
+  const defaultAssignment = {
+    id: 0,
+    title: "",
+    dueDate: "",
+    description: "",
+    link: ""
+  }
+  const [ assignment, setAssignment ] = React.useState<Assignment>(defaultAssignment);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -26,14 +23,14 @@ const Form = (props: { addAssignment: any, updated: boolean }) => {
     }
   }, [ updated ])
 
-  const handleUpdate = (_assignment: Assignment) => {
+  const handleUpdate = (_assignment: { field: string, value: string }) => {
     setAssignment({ ...assignment, [_assignment.field]: _assignment.value });
   }
 
   return (
     <div className="form-container" style={{textAlign: "left", padding: "5%"}}>
       <div className="form-container-body">
-        <form className="assignment-form" onSubmit={(e) => handleSubmit(e)} >
+        <form id="assignment-form" className="assignment-form" onSubmit={(e) => handleSubmit(e)} >
           <div className="title-input">
             <label>Title:</label>
             <input 
@@ -41,6 +38,7 @@ const Form = (props: { addAssignment: any, updated: boolean }) => {
               type="text" 
               className="assignment-title" 
               name="title" 
+              value={assignment.title}
               onChange={(e) => handleUpdate(
                 { field: "title", value: e.target.value }
               )}
@@ -53,6 +51,7 @@ const Form = (props: { addAssignment: any, updated: boolean }) => {
               type="text" 
               className="assignment-link" 
               name="link" 
+              value={assignment.link}
               onChange={(e) => handleUpdate(
                 { field: "link", value: e.target.value }
               )}
@@ -65,6 +64,7 @@ const Form = (props: { addAssignment: any, updated: boolean }) => {
               type="date" 
               className="assignment-dueDate" 
               name="dueDate" 
+              value={assignment.dueDate}
               onChange={(e) => handleUpdate(
                 { field: "dueDate", value: e.target.value }
               )}
@@ -74,6 +74,7 @@ const Form = (props: { addAssignment: any, updated: boolean }) => {
             <label>Description:</label>
             <textarea 
               style={{display: "block", width: "90%"}} 
+              value={assignment.description}
               onChange={(e) => handleUpdate(
                 { field: "description", value: e.target.value }
               )} 
