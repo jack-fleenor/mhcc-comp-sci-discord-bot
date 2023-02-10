@@ -4,10 +4,12 @@ interface Assignment {
   link: string;
   description: string;
   dueDate: string;
+  selected: boolean;
 }
 
 type AssignmentProps = {
   updated: boolean,
+  selected: boolean,
   assignment: Assignment,
   deleteAssignment: Function,
   updateAssignment: Function

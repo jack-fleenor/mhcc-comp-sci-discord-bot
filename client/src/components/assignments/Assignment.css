@@ -1,7 +1,6 @@
 .assignment-card {
   border: 1px solid #000;
   border-radius: 15px;
-  min-width: 250px;
   margin: 5px;
 }
 
@@ -9,6 +8,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  text-align: left;
   padding: 5px 15px 5px;
 }
 

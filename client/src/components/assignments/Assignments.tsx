@@ -1,53 +1,73 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import Form from './Form';
 import AssignmentCard from './AssignmentCard';
+import { handleDeleteAssignment, handleDeleteAssignments, handleGetAssignments, handlePostAssignment } from '../../api';
 
 const Assignments = () => {
   const [ assignments, setAssignments ] = useState<Array<Assignment>>([]);
   const [ updated, setUpdated ] = useState<boolean>(false);
 
-  const addAssignment = (assignment: Assignment) : void => postAssignment(assignment);
-
-  const deleteAssignment = (assignment: Assignment) : void => {
-    const { id } = assignment;
-    axios.delete(`http://localhost:5174/api/assignments/${id}`)
-    .then((): void => setUpdated(true))
-    .catch((error): void => console.log(error));
+  const addAssignment = async (assignment: Assignment) : Promise<void> => {
+    const result = await handlePostAssignment(assignment);
+    if(result.status === 200) {
+      setUpdated(true);
+    } else {
+      console.error("error: " + result);
+    }
   }
 
-  const updateAssignment = (assignment: Assignment) : void => {
-    const { id, title, description, dueDate, link } = assignment;
-    axios.patch(`http://localhost:5174/api/assignments/${id}`, { title, link, dueDate, description })
-    .then((): void => setUpdated(true))
-    .catch((error): void => console.log(error));
+  const deleteAssignment = async (assignment: Assignment) : Promise<void> => {
+    const result = await handleDeleteAssignment(assignment);
+    if(result.status === 200) {
+      setUpdated(true);
+    } else {
+      console.error("error: " + result);
+    }
   }
 
-  const postAssignment = (assignment: Assignment) : void => {
-    axios.post( "http://localhost:5174/api/assignments/", assignment )
-    .then((): void => setUpdated(true))
-    .catch((error): void => console.log(error));
-  };
+  const deleteAssignments = async (assignments: Assignment[]) : Promise<void> => {
+    const result = await handleDeleteAssignments(assignments);
+    if(result.length === 0) {
+      setUpdated(true);
+    } else {
+      console.error("error: " + result);
+    }
+  }
 
-  const getAssignments = (): void => {
-    axios.get("http://localhost:5174/api/assignments")
-    .then((response) => {
-      const assignments: Assignment[] = response.data.data;
-      setAssignments(assignments)
-    })
-    .catch((error): void => console.log(error));
+  const updateAssignment = async (assignment: Assignment) : Promise<void> => {
+    const result: AxiosResponse | AxiosError = await handleDeleteAssignment(assignment);
+    if(result.status === 200) {
+      setUpdated(true);
+    } else {
+      console.error("error: " + result);
+    }
+  }
+  
+  const fetchAssignments = async (): Promise<void> => {
+    const results: AxiosResponse | AxiosError = await handleGetAssignments();
+    if(results.status === 200 && !axios.isAxiosError(results)) {
+      const assignments: Assignment[] = results.data.data;
+      setAssignments(assignments);
+    } else {
+      console.error("Error fetching assignments: " + results.status + " " + results);
+    }
   }
 
   useEffect(() => {
-    getAssignments();
+    fetchAssignments();
     if(updated) setUpdated(false);
-  }, [ postAssignment, deleteAssignment ]);
+  }, [ updated ]);
 
   return (
-    <div className="assignments-container">
-      <div className="assignments-list">
+    <div>
+      <div>
+        <Form addAssignment={addAssignment} updated={updated}  />
+      </div>
+      <div className="assignments-list" style={{maxHeight: "500px", overflowY: "auto"}}>
         { assignments && assignments.map((assignment: Assignment): JSX.Element => {
             return <AssignmentCard
+              selected={false}
               updated={updated}
               assignment={assignment} 
               deleteAssignment={deleteAssignment} 
@@ -55,9 +75,6 @@ const Assignments = () => {
             />
           })
         }
-      </div>
-      <div className="assignments-menu">
-        <Form addAssignment={addAssignment} updated={updated}  />
       </div>
     </div>
   )
