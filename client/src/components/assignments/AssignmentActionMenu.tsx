@@ -44,7 +44,7 @@ const AssignmentActionMenu = ({ activeEdit, handleMenuAction }: AssignmentAction
         </button>
       </div> 
       : <button 
-          onClick={() => handleMenuOpen()}
+          onClick={(): void => handleMenuOpen()}
           style={{padding: "5px", backgroundColor: "transparent"}}
         >
           <BsThreeDotsVertical />

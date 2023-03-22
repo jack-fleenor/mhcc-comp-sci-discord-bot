@@ -10,10 +10,14 @@ interface Config {
   DISCORD_TOKEN: string;
 }
 
-const getConfig = (): ENV => {
-  return {
-    DISCORD_TOKEN: process.env.DISCORD_TOKEN
-  };
+const getConfig = (config: string | ""): ENV => {
+  let configObj: any = {};
+  configObj[config] = process.env[config];
+  console.log(configObj);
+  return configObj;
+  // return {
+  //   DISCORD_TOKEN: process.env.DISCORD_TOKEN
+  // };
 };
 
 const getSanitzedConfig = (config: ENV): Config => {
@@ -25,7 +29,7 @@ const getSanitzedConfig = (config: ENV): Config => {
   return config as Config;
 };
 
-const config = getConfig();
+const config = getConfig('DISCORD_TOKEN');
 
 const sanitizedConfig = getSanitzedConfig(config);
 

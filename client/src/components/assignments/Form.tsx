@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { BiLink } from 'react-icons/bi';
 import "./Form.css";
 
-const Form = (props: { addAssignment: any, updated: boolean }) => {
-  const { addAssignment, updated } = props;
+const Form = (props: { addAssignment: any }) => {
+  const { addAssignment } = props;
   const defaultAssignment = {
     id: 0,
     title: "",
@@ -14,29 +14,26 @@ const Form = (props: { addAssignment: any, updated: boolean }) => {
   }
   const [ assignment, setAssignment ] = React.useState<Assignment>(defaultAssignment);
   const [ openHyperLink, setOpenHyperLink ] = React.useState<boolean>(false);
+
   const handleSubmit = (e: any) => {
+    console.log("I fired")
     e.preventDefault();
     addAssignment(assignment)
   }
 
-  const handleLink = () => {
+  const handleLink = (e: any) => {
+    e.preventDefault();
     setOpenHyperLink(!openHyperLink)
   };
-
-  useEffect(() => {
-    if(updated){
-      console.log('REFRESH')
-    }
-  }, [ updated ])
 
   const handleUpdate = (_assignment: { field: string, value: string }) => {
     setAssignment({ ...assignment, [_assignment.field]: _assignment.value });
   }
 
   return (
-    <div className="form-container" style={{textAlign: "left", padding: "5%"}}>
+    <div className="form-container" style={{textAlign: "left", padding: "15px"}}>
       <div className="form-container-body">
-        <form id="assignment-form" className="assignment-form" style={{display: "flex"}} onSubmit={(e) => handleSubmit(e)} >
+        <form id="assignment-form" className="assignment-form" style={{display: "flex", justifyContent: "space-around"}} >
           <div className="first-part" style={{width: "50%"}}>
             <div className="title-input" style={{display: "flex"}} >
               <label>Title:</label>
@@ -50,7 +47,7 @@ const Form = (props: { addAssignment: any, updated: boolean }) => {
                   { field: "title", value: e.target.value }
                 )}
               />
-              <button onClick={() => handleLink()} style={{padding: "0px"}}>
+              <button onClick={(e) => handleLink(e)} style={{padding: "0px"}}>
                 <BiLink />
               </button>
             </div>
@@ -84,7 +81,7 @@ const Form = (props: { addAssignment: any, updated: boolean }) => {
             </div>
           </div>
           <div className="second-part" style={{display: "50%"}}>
-            <div className="description-input" >
+            <div className="description-input" style={{display: "100%"}}>
               <label>Description:</label>
               <textarea 
                 style={{display: "block"}} 
@@ -94,14 +91,18 @@ const Form = (props: { addAssignment: any, updated: boolean }) => {
                 )} 
                 className="assignment-description" 
                 name="description" 
-                rows={5}
+                
               />
             </div>
-            <button type="submit" className="assignment-form-submit">
-              Submit
-            </button>            
           </div>
+          <div className="button-container" style={{width: "100%", display: "block"}}>
+          <button onClick={(e) => handleSubmit(e)} className="assignment-form-submit">
+          Submit
+        </button>
+          </div>
+
         </form>
+
       </div>
     </div>
   )

@@ -20,7 +20,7 @@ enum MenuActions {
 }
 
 const AssignmentCard = (props: AssignmentProps): JSX.Element => {
-  const { updated, assignment, deleteAssignment, updateAssignment, selected } = props;
+  const { assignment, deleteAssignment, updateAssignment, selected } = props;
   const [ activeEdit, setActiveEdit ] = useState<boolean>(false);
   const [ localAssignment, setLocalAssignment ] = useState<Assignment>(assignment);
 
@@ -49,7 +49,7 @@ const AssignmentCard = (props: AssignmentProps): JSX.Element => {
     { ...localAssignment, [key]: value }
   );
 
-  useEffect(() => setActiveEdit(false), [ updated ]);
+  useEffect(() => setActiveEdit(false), [ ]);
 
   return (
     <div className="assignment-card">

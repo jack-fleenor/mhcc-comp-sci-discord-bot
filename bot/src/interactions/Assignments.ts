@@ -7,6 +7,7 @@ interface Assignment{
     dueDate: Date;
     link: string;
 }
+
 interface Assignments extends Array<Assignment>{};
 
 export const Assignments: Command = {
@@ -14,7 +15,7 @@ export const Assignments: Command = {
     description: "Returns this weeks assignments.",
     type: 1, // CHAT_INPUT
     run: async (client: Client, interaction: CommandInteraction) => {
-        let header = "Here are the assignments for due within the next 7 days.\n ----\n";
+        let header = "Here are the assignments due within the next 7 days.\n ----\n";
         let message: string = '';
         const assignments: Assignments = await axios
         .get("http://localhost:5174/api/assignments")

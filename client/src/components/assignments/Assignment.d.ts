@@ -8,7 +8,6 @@ interface Assignment {
 }
 
 type AssignmentProps = {
-  updated: boolean,
   selected: boolean,
   assignment: Assignment,
   deleteAssignment: Function,

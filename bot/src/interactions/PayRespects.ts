@@ -1,4 +1,4 @@
-import { CommandInteraction, Client, APIVersion } from "discord.js";
+import { CommandInteraction, Client } from "discord.js";
 import { Command } from "../Command";
 
 export const PayRespects: Command = {
